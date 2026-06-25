@@ -1,0 +1,46 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for caching
+COPY backend/requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir fastapi uvicorn pillow python-dotenv pydantic python-multipart groq
+RUN pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu
+
+# Copy backend code
+COPY backend/ .
+
+# Copy trained models (breast, brain, cervical, kidney, and lung cancer)
+COPY ml_models/checkpoints/breast_cancer/ /app/ml_models/checkpoints/breast_cancer/
+COPY ml_models/checkpoints/brain_cancer/ /app/ml_models/checkpoints/brain_cancer/
+COPY ml_models/checkpoints/cervical_cancer/ /app/ml_models/checkpoints/cervical_cancer/
+COPY ml_models/checkpoints/kidney_cancer/ /app/ml_models/checkpoints/kidney_cancer/
+COPY ml_models/checkpoints/lung_cancer/ /app/ml_models/checkpoints/lung_cancer/
+
+# Create necessary directories (in case checkpoints don't exist)
+RUN mkdir -p /app/ml_models/checkpoints/breast_cancer
+RUN mkdir -p /app/ml_models/checkpoints/brain_cancer
+RUN mkdir -p /app/ml_models/checkpoints/cervical_cancer
+RUN mkdir -p /app/ml_models/checkpoints/kidney_cancer
+RUN mkdir -p /app/ml_models/checkpoints/lung_cancer
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV MODEL_PATH=/app/ml_models/checkpoints/breast_cancer/best_model.pth
+ENV BRAIN_MODEL_PATH=/app/ml_models/checkpoints/brain_cancer/best_model.pth
+ENV CERVICAL_MODEL_PATH=/app/ml_models/checkpoints/cervical_cancer/best_model.pth
+ENV KIDNEY_MODEL_PATH=/app/ml_models/checkpoints/kidney_cancer/best_model.pth
+ENV LUNG_MODEL_PATH=/app/ml_models/checkpoints/lung_cancer/best_model.pth
+
+# Expose port
+EXPOSE 8001
+
+# Run the application
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]

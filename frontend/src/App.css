@@ -1,0 +1,1391 @@
+/* OncoAI - Premium Multi-Cancer Detection UI */
+
+:root {
+  /* Colors - Breast Cancer (Pink) */
+  --primary: #E91E63;
+  --primary-dark: #C2185B;
+  --primary-light: #FCE4EC;
+  --secondary: #9C27B0;
+  --accent: #673AB7;
+
+  /* Brain Cancer Colors (Blue/Purple) */
+  --brain-primary: #3F51B5;
+  --brain-primary-light: #E8EAF6;
+  --brain-secondary: #7C4DFF;
+  --brain-accent: #536DFE;
+
+  /* Tumor type colors */
+  --glioma: #F44336;
+  --meningioma: #FF9800;
+  --pituitary: #4CAF50;
+
+  --benign: #4CAF50;
+  --benign-light: #E8F5E9;
+  --malignant: #F44336;
+  --malignant-light: #FFEBEE;
+
+  --bg-dark: #0F0F1A;
+  --bg-card: rgba(255, 255, 255, 0.08);
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.5);
+  --border: rgba(255, 255, 255, 0.1);
+
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glow: 0 0 40px rgba(233, 30, 99, 0.3);
+  --brain-glow: 0 0 40px rgba(63, 81, 181, 0.3);
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.app {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated Background */
+.bg-animation {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(233, 30, 99, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(156, 39, 176, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(103, 58, 183, 0.1) 0%, transparent 60%);
+  animation: pulseGlow 8s ease-in-out infinite;
+}
+
+.bg-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Brain mode gradient */
+.bg-gradient.brain {
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(63, 81, 181, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(124, 77, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(83, 109, 254, 0.1) 0%, transparent 60%);
+}
+
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Header */
+.header {
+  position: relative;
+  z-index: 10;
+  padding: 1.5rem 2rem;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-content {
+  width: 100%;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-icon {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--glow);
+}
+
+.logo-icon .heart-icon {
+  color: white;
+  animation: heartbeat 2s ease-in-out infinite;
+}
+
+.logo-icon .sparkle {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  color: #FFD700;
+  width: 18px;
+  height: 18px;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes sparkle {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: rotate(180deg);
+  }
+}
+
+.logo-text h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.8) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+}
+
+.logo-text span {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.header-stats {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: var(--bg-card);
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.stat svg {
+  color: var(--primary);
+}
+
+/* Main Content */
+.main {
+  position: relative;
+  z-index: 10;
+  padding: 2rem 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.hero-section h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(135deg, #fff 0%, var(--primary-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-section p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Glass Card */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-header svg {
+  color: var(--primary);
+}
+
+.card-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Dropzone */
+.dropzone {
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.02);
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropzone:hover,
+.dropzone.active {
+  border-color: var(--primary);
+  background: rgba(233, 30, 99, 0.05);
+}
+
+.dropzone.has-image {
+  padding: 1rem;
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.upload-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: var(--glow);
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.upload-content h4 {
+  font-size: 1.25rem;
+  color: var(--text-primary);
+}
+
+.upload-content p {
+  color: var(--text-secondary);
+}
+
+.file-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 0.4rem 1rem;
+  background: var(--bg-card);
+  border-radius: 100px;
+}
+
+/* Preview */
+.preview-wrapper {
+  position: relative;
+  width: 100%;
+  height: 250px;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.remove-btn:hover {
+  background: var(--malignant);
+  transform: scale(1.1);
+}
+
+.image-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.preview-wrapper:hover .image-overlay {
+  opacity: 1;
+}
+
+.image-overlay span {
+  color: white;
+  font-size: 0.9rem;
+}
+
+/* Analyze Button */
+.analyze-btn {
+  width: 100%;
+  padding: 1.1rem;
+  margin-top: 1.5rem;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  transition: all 0.3s;
+  box-shadow: 0 4px 20px rgba(233, 30, 99, 0.4);
+}
+
+.analyze-btn:hover:not(.disabled):not(.loading) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(233, 30, 99, 0.5);
+}
+
+.analyze-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.analyze-btn.loading {
+  background: var(--text-muted);
+  box-shadow: none;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error Alert */
+.error-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--malignant-light);
+  color: var(--malignant);
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+
+/* Empty Results */
+.empty-results {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.empty-icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 1.5rem;
+  background: var(--bg-card);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.empty-results h4 {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.empty-results p {
+  color: var(--text-secondary);
+  max-width: 300px;
+  margin: 0 auto 2rem;
+}
+
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-card);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.feature svg {
+  color: var(--benign);
+}
+
+/* Results Content */
+.results-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.status-badge.benign {
+  background: var(--benign-light);
+  color: var(--benign);
+}
+
+.status-badge.malignant {
+  background: var(--malignant-light);
+  color: var(--malignant);
+}
+
+/* Main Result */
+.result-main {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 2px solid;
+}
+
+.result-main.benign {
+  background: rgba(76, 175, 80, 0.1);
+  border-color: var(--benign);
+}
+
+.result-main.malignant {
+  background: rgba(244, 67, 54, 0.1);
+  border-color: var(--malignant);
+}
+
+.result-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.result-main.benign .result-icon {
+  background: var(--benign);
+  color: white;
+}
+
+.result-main.malignant .result-icon {
+  background: var(--malignant);
+  color: white;
+}
+
+.result-info {
+  flex: 1;
+}
+
+.result-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.result-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.severity-tag {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.severity-tag.low {
+  background: var(--benign-light);
+  color: var(--benign);
+}
+
+.severity-tag.high {
+  background: var(--malignant-light);
+  color: var(--malignant);
+}
+
+/* Confidence Circle */
+.confidence-circle {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+}
+
+.confidence-circle svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.confidence-circle .bg {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 6;
+}
+
+.confidence-circle .progress {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s;
+}
+
+.result-main.benign .progress {
+  stroke: var(--benign);
+}
+
+.result-main.malignant .progress {
+  stroke: var(--malignant);
+}
+
+.confidence-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confidence-text .value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.confidence-text .percent {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Probability Section */
+.probability-section {
+  padding: 1.5rem;
+  background: var(--bg-card);
+  border-radius: 16px;
+}
+
+.probability-section h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+}
+
+.prob-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.prob-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.prob-label.benign-text {
+  color: var(--benign);
+}
+
+.prob-label.malignant-text {
+  color: var(--malignant);
+}
+
+.prob-value {
+  color: var(--text-secondary);
+}
+
+.prob-bar-bg {
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.prob-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.prob-bar.benign {
+  background: var(--benign);
+}
+
+.prob-bar.malignant {
+  background: var(--malignant);
+}
+
+/* Recommendation */
+.recommendation-box {
+  padding: 1.25rem;
+  background: rgba(103, 58, 183, 0.1);
+  border: 1px solid rgba(103, 58, 183, 0.3);
+  border-radius: 12px;
+}
+
+.rec-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.rec-header svg {
+  color: var(--accent);
+}
+
+.rec-header h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.recommendation-box p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Footer */
+.footer {
+  position: relative;
+  z-index: 10;
+  padding: 1.5rem 2rem;
+  margin-top: 3rem;
+  border-top: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.disclaimer {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.disclaimer svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #FFC107;
+}
+
+.disclaimer strong {
+  color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-stats {
+    display: none;
+  }
+
+  .hero-section h2 {
+    font-size: 1.75rem;
+  }
+
+  .content-grid {
+    gap: 1.5rem;
+  }
+
+  .glass-card {
+    padding: 1.5rem;
+  }
+
+  .result-main {
+    flex-wrap: wrap;
+  }
+
+  .confidence-circle {
+    margin-left: auto;
+  }
+}
+
+/* Preview Actions */
+.preview-actions {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.75rem;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.change-btn {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+}
+
+.change-btn:hover {
+  background: white;
+  transform: scale(1.05);
+}
+
+.action-btn.remove-btn {
+  position: static;
+  width: auto;
+  height: auto;
+  background: rgba(244, 67, 54, 0.9);
+  color: white;
+  border-radius: 8px;
+}
+
+.action-btn.remove-btn:hover {
+  background: var(--malignant);
+  transform: scale(1.05);
+}
+
+/* Report Button */
+.report-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem;
+  background: var(--bg-card);
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.report-btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: white;
+}
+
+.report-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Full Report */
+.full-report {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.report-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: rgba(103, 58, 183, 0.2);
+  border-bottom: 1px solid var(--border);
+}
+
+.report-header svg {
+  color: var(--accent);
+}
+
+.report-header h4 {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.report-id {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+.report-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.report-section h5 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+}
+
+.report-section p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.report-detail {
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.report-detail strong {
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-right: 0.5rem;
+}
+
+.report-detail span {
+  color: var(--text-secondary);
+}
+
+.report-detail.urgency span {
+  color: var(--malignant);
+  font-weight: 600;
+}
+
+.rec-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .rec-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rec-group h6 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.rec-group ul {
+  list-style: none;
+  padding: 0;
+}
+
+.rec-group li {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  padding: 0.3rem 0;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.rec-group li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+.report-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 193, 7, 0.1);
+  border-top: 1px solid var(--border);
+}
+
+.report-disclaimer svg {
+  color: #FFC107;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.report-disclaimer span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ========== Cancer Type Selector ========== */
+.cancer-type-selector {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.type-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 100px;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.type-btn:hover {
+  border-color: var(--primary);
+  color: var(--text-primary);
+}
+
+.type-btn.active {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  border-color: transparent;
+  color: white;
+  box-shadow: var(--glow);
+}
+
+.type-btn.brain:hover {
+  border-color: var(--brain-primary);
+}
+
+.type-btn.brain.active {
+  background: linear-gradient(135deg, var(--brain-primary) 0%, var(--brain-secondary) 100%);
+  box-shadow: var(--brain-glow);
+}
+
+/* ========== Brain Mode Overrides ========== */
+.app.brain-mode .logo-icon.brain {
+  background: linear-gradient(135deg, var(--brain-primary) 0%, var(--brain-secondary) 100%);
+  box-shadow: var(--brain-glow);
+}
+
+.app.brain-mode .logo-icon .brain-icon {
+  color: white;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.app.brain-mode .card-header svg {
+  color: var(--brain-primary);
+}
+
+.app.brain-mode .stat svg {
+  color: var(--brain-primary);
+}
+
+.app.brain-mode .upload-icon-wrapper.brain {
+  background: linear-gradient(135deg, var(--brain-primary) 0%, var(--brain-secondary) 100%);
+  box-shadow: var(--brain-glow);
+}
+
+.app.brain-mode .analyze-btn.brain {
+  background: linear-gradient(135deg, var(--brain-primary) 0%, var(--brain-secondary) 100%);
+  box-shadow: 0 4px 20px rgba(63, 81, 181, 0.4);
+}
+
+.app.brain-mode .analyze-btn.brain:hover:not(.disabled):not(.loading) {
+  box-shadow: 0 8px 30px rgba(63, 81, 181, 0.5);
+}
+
+.app.brain-mode .empty-icon.brain {
+  color: var(--brain-primary);
+}
+
+.app.brain-mode .hero-section h2 {
+  background: linear-gradient(135deg, #fff 0%, var(--brain-primary-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ========== Brain Cancer Probability Bars ========== */
+.prob-label.glioma-text {
+  color: var(--glioma);
+}
+
+.prob-label.meningioma-text {
+  color: var(--meningioma);
+}
+
+.prob-label.pituitary-text {
+  color: var(--pituitary);
+}
+
+.prob-bar.glioma {
+  background: var(--glioma);
+}
+
+.prob-bar.meningioma {
+  background: var(--meningioma);
+}
+
+.prob-bar.pituitary {
+  background: var(--pituitary);
+}
+
+/* ========== Severity Tag Medium ========== */
+.severity-tag.medium {
+  background: rgba(255, 152, 0, 0.2);
+  color: var(--meningioma);
+}
+
+/* ========== Unified Mode Styles ========== */
+.logo-icon.unified {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 0 40px rgba(102, 126, 234, 0.3);
+}
+
+.logo-icon .scan-icon {
+  color: white;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.upload-icon-wrapper.unified {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 0 40px rgba(102, 126, 234, 0.3);
+}
+
+.analyze-btn.unified {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+}
+
+.analyze-btn.unified:hover:not(.disabled):not(.loading) {
+  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.5);
+}
+
+.empty-icon.unified {
+  color: #667eea;
+}
+
+/* Supported Types Badges */
+.supported-types {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.type-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.type-badge svg {
+  color: var(--primary);
+}
+
+.type-badge:last-child svg {
+  color: var(--brain-primary);
+}
+
+/* Detected Type Badge */
+.detected-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 100px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.detected-type-badge.breast {
+  background: linear-gradient(135deg, rgba(233, 30, 99, 0.15) 0%, rgba(156, 39, 176, 0.15) 100%);
+  color: var(--primary);
+  border: 1px solid rgba(233, 30, 99, 0.3);
+}
+
+.detected-type-badge.brain {
+  background: linear-gradient(135deg, rgba(63, 81, 181, 0.15) 0%, rgba(124, 77, 255, 0.15) 100%);
+  color: var(--brain-primary);
+  border: 1px solid rgba(63, 81, 181, 0.3);
+}
+
+.detected-type-badge.cervical {
+  background: linear-gradient(135deg, rgba(0, 150, 136, 0.15) 0%, rgba(38, 166, 154, 0.15) 100%);
+  color: #009688;
+  border: 1px solid rgba(0, 150, 136, 0.3);
+}
+
+.detected-type-badge.kidney {
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.15) 0%, rgba(255, 193, 7, 0.15) 100%);
+  color: #FF9800;
+  border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.detected-type-badge.lung {
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.15) 0%, rgba(3, 169, 244, 0.15) 100%);
+  color: #2196F3;
+  border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+.detected-type-badge.colon {
+  background: linear-gradient(135deg, rgba(121, 85, 72, 0.15) 0%, rgba(161, 136, 127, 0.15) 100%);
+  color: #8D6E63;
+  border: 1px solid rgba(121, 85, 72, 0.3);
+}
+
+.detected-type-badge.lymphoma {
+  background: linear-gradient(135deg, rgba(156, 39, 176, 0.15) 0%, rgba(186, 104, 200, 0.15) 100%);
+  color: #AB47BC;
+  border: 1px solid rgba(156, 39, 176, 0.3);
+}
+
+.detected-type-badge.oral {
+  background: linear-gradient(135deg, rgba(255, 87, 34, 0.15) 0%, rgba(255, 138, 101, 0.15) 100%);
+  color: #FF5722;
+  border: 1px solid rgba(255, 87, 34, 0.3);
+}
+
+/* Cancer Type Selector */
+.cancer-type-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.cancer-type-selector label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.cancer-type-selector select {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancer-type-selector select:hover {
+  border-color: var(--primary);
+}
+
+.cancer-type-selector select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.2);
+}
+
+.cancer-type-selector select option {
+  background: var(--bg-dark);
+  color: var(--text-primary);
+}
+
+/* Cervical probability bars */
+.prob-bar.cervical {
+  background: linear-gradient(135deg, #E91E63, #F44336);
+}
+
+.prob-bar.cervical-low {
+  background: linear-gradient(135deg, #009688, #26A69A);
+}
+
+/* Medium Result State */
+.result-main.medium {
+  background: rgba(255, 152, 0, 0.1);
+  border-color: var(--meningioma);
+}
+
+.result-main.medium .result-icon {
+  background: var(--meningioma);
+  color: white;
+}
+
+.result-main.medium .progress {
+  stroke: var(--meningioma);
+}
+
+.status-badge.medium {
+  background: rgba(255, 152, 0, 0.2);
+  color: var(--meningioma);
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+  .supported-types {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .type-badge {
+    width: 100%;
+    max-width: 220px;
+    justify-content: center;
+  }
+}

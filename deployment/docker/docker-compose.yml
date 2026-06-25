@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ../..
+      dockerfile: deployment/docker/Dockerfile.backend
+    container_name: oncoai-backend
+    ports:
+      - "8001:8001"
+    env_file:
+      - ../../.env
+    environment:
+      - MODEL_PATH=/app/ml_models/checkpoints/breast_cancer/best_model.pth
+      - BRAIN_MODEL_PATH=/app/ml_models/checkpoints/brain_cancer/best_model.pth
+      - CERVICAL_MODEL_PATH=/app/ml_models/checkpoints/cervical_cancer/best_model.pth
+      - KIDNEY_MODEL_PATH=/app/ml_models/checkpoints/kidney_cancer/best_model.pth
+      - LUNG_MODEL_PATH=/app/ml_models/checkpoints/lung_cancer/best_model.pth
+      - COLON_MODEL_PATH=/app/ml_models/checkpoints/colon_cancer/best_model.pth
+      - LYMPHOMA_MODEL_PATH=/app/ml_models/checkpoints/lymphoma/best_model.pth
+      - ORAL_MODEL_PATH=/app/ml_models/checkpoints/oral_cancer/best_model.pth
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../../ml_models/checkpoints:/app/ml_models/checkpoints:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ../..
+      dockerfile: deployment/docker/Dockerfile.frontend
+    container_name: oncoai-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  default:
+    name: oncoai-network
