@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+*.egg
+venv/
+.venv/
+env/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+build/
+dist/
+
+# ML Model files (large - don't commit)
+*.pth
+*.pt
+*.h5
+*.onnx
+*.pkl
+checkpoints/
+
+# Datasets (large - don't commit)
+data/
+datasets/
+*.zip
+*.tar.gz
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+
+# Docker
+*.log
+docker-compose.override.yml
